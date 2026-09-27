@@ -1,0 +1,67 @@
+# DAX Measures
+
+## 1. Total Sales
+TotalSales = SUM(order_details[Sales])
+
+##2. Highest Sales Pizza
+Highest Sales Pizza = 
+VAR TopPizza =
+    TOPN(
+        1,
+        SUMMARIZE(
+            pizza_types,
+            pizza_types[name],
+            "TotalSales",
+            CALCULATE(SUM(order_details[Sales]))
+        ),
+        [TotalSales],
+        DESC
+    )
+RETURN
+    CONCATENATEX(
+        TopPizza,
+        pizza_types[name],
+        ", "
+    )
+
+##3. Most Ordered Pizza
+Most Ordered Pizza = 
+VAR TopPizza =
+    TOPN(
+        1,
+        SUMMARIZE(
+            pizza_types,
+            pizza_types[name],
+            "TotalQuantity",
+            CALCULATE(SUM(order_details[quantity]))
+        ),
+        [TotalQuantity],
+        DESC
+    )
+RETURN
+    CONCATENATEX(
+        TopPizza,
+        pizza_types[name],
+        ", "
+    )
+
+##4. Most Ordered Pizza Category
+Most Ordered Pizza Category = 
+VAR TopPizza =
+    TOPN(
+        1,
+        SUMMARIZE(
+            pizza_types,
+            pizza_types[category],
+            "TotalQuantity",
+            CALCULATE(SUM(order_details[quantity]))
+        ),
+        [TotalQuantity],
+        DESC
+    )
+RETURN
+    CONCATENATEX(
+        TopPizza,
+        pizza_types[category],
+        ", "
+    )
